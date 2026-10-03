@@ -21,7 +21,6 @@ def load_leaderboard():
 
 def save_score(name, score, level):
     board = load_leaderboard()
-    # Check if player already exists in leaderboard; update if higher score
     existing = next((item for item in board if item["name"].strip().lower() == name.strip().lower()), None)
     if existing:
         if score > existing["score"]:
@@ -100,7 +99,7 @@ def trigger_sound(sound_type):
     )
     st.components.v1.html(js_code, height=0, width=0)
 
-# 12 UFC Superstars (Real Static Verified Images)
+# 12 UFC Superstars
 CHARACTERS = {
     "Khabib Nurmagomedov": {
         "price": 500,
@@ -185,9 +184,9 @@ FF_GUNS = {
 }
 
 MONSTERS = [
-    {"name": "Grumble Goblin", "img": "https://api.dicebear.com/7.x/bottts/svg?seed=GrumbleArena&backgroundColor=b6e3f4", "max_hp": 100},
-    {"name": "Shadow Dragon", "img": "https://api.dicebear.com/7.x/bottts/svg?seed=ShadowDragonX&backgroundColor=ffdfbf", "max_hp": 180},
-    {"name": "Titan Mecha", "img": "https://api.dicebear.com/7.x/bottts/svg?seed=TitanWarriorZ&backgroundColor=ffd5dc", "max_hp": 260},
+    {"name": "Grumble Goblin", "img": "https://api.dicebear.com/7.x/bottts/svg?seed=GrumbleArena&backgroundColor=b6e3f4", "max_hp": 100, "stage": "Round 1 (Challenger Match)"},
+    {"name": "Shadow Dragon", "img": "https://api.dicebear.com/7.x/bottts/svg?seed=ShadowDragonX&backgroundColor=ffdfbf", "max_hp": 180, "stage": "Round 2 (Title Eliminator)"},
+    {"name": "Titan Mecha", "img": "https://api.dicebear.com/7.x/bottts/svg?seed=TitanWarriorZ&backgroundColor=ffd5dc", "max_hp": 260, "stage": "Round 3 (World Championship)"},
 ]
 
 TIMER_MAP = {
@@ -232,6 +231,7 @@ def set_new_question():
     st.session_state.q_id += 1
 
 # Initializations
+if "game_started" not in st.session_state: st.session_state.game_started = False
 if "level" not in st.session_state: st.session_state.level = 0
 if "score" not in st.session_state: st.session_state.score = 0
 if "streak" not in st.session_state: st.session_state.streak = 0
@@ -251,7 +251,8 @@ if "play_sound" not in st.session_state: st.session_state.play_sound = None
 if "input_counter" not in st.session_state: st.session_state.input_counter = 0
 
 curr_sec = TIMER_MAP.get(st.session_state.timer_choice, 8)
-curr_mon = MONSTERS[st.session_state.level % len(MONSTERS)]
+safe_level = min(st.session_state.level, len(MONSTERS) - 1)
+curr_mon = MONSTERS[safe_level]
 hero = CHARACTERS.get(st.session_state.equipped_costume, CHARACTERS["Sean O'Malley"])
 gun = FF_GUNS.get(st.session_state.equipped_gun, FF_GUNS["G18 Pistol"])
 
@@ -264,7 +265,7 @@ if st.session_state.play_sound:
     trigger_sound(st.session_state.play_sound)
     st.session_state.play_sound = None
 
-# Sidebar
+# Sidebar (Available on all screens)
 with st.sidebar:
     st.title("🏆 Leaderboard")
     current_board = load_leaderboard()
@@ -364,138 +365,86 @@ with st.sidebar:
         set_new_question()
         st.rerun()
 
-# Main Arena
-st.markdown("<h1 style='text-align: center; color: #ff3333;'>🥊 QuestMath: UFC Octagon Arena ⚔️</h1>", unsafe_allow_html=True)
+# ==========================================
+# SCREEN 1: WELCOME / START SCREEN
+# ==========================================
+if not st.session_state.game_started:
+    st.markdown("<h1 style='text-align: center; color: #ff3333;'>🥊 QUESTMATCH: UFC ARENA ⚔️</h1>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: #ffffff;'>Solve Fast • Land Strikes • Become World Champion</h3>", unsafe_allow_html=True)
+    st.write("")
 
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("⭐ Coins", st.session_state.score)
-col2.metric("🔥 KO Streak", f"{st.session_state.streak}x")
-col3.metric("🔫 Weapon", f"{gun['icon']} {st.session_state.equipped_gun}")
-col4.metric("🥋 Fighter", f"{hero['icon']} {st.session_state.equipped_costume}")
+    w_col1, w_col2 = st.columns([1, 1])
+    with w_col1:
+        st.info("""
+        ### 📋 Fight Rules & Road to Title:
+        * 🎯 **Round 1:** Grumble Goblin *(100 HP)*
+        * 🐉 **Round 2:** Shadow Dragon *(180 HP)*
+        * 🤖 **Round 3 (Title Fight):** Titan Mecha *(260 HP)*
+        * ⏱️ Answer within the timer to deal weapon damage!
+        * ❌ Wrong or late answers result in opponent counter-attacks.
+        """)
+    with w_col2:
+        st.success(f"""
+        ### 👤 Your Selected Fighter:
+        * **Fighter:** {hero['icon']} {st.session_state.equipped_costume}
+        * **Weapon:** {gun['icon']} {st.session_state.equipped_gun}
+        * **Coins:** {st.session_state.score} 🪙
+        *(Check Sidebar menu to buy/change fighters and weapons)*
+        """)
 
-st.divider()
-
-if st.session_state.player_hp <= 0:
-    st.error(f"💀 KNOCKED OUT! Final Score: {st.session_state.score} | Round Reached: {st.session_state.level + 1}")
-    
-    if not st.session_state.saved:
-        with st.form("save_form"):
-            p_name = st.text_input("Enter Fighter Name for Hall of Fame:", max_chars=14, placeholder="Enter your name...")
-            if st.form_submit_button("💾 Save Score"):
-                if p_name.strip():
-                    save_score(p_name.strip(), st.session_state.score, st.session_state.level + 1)
-                    st.session_state.saved = True
-                    st.success("Score registered in the Leaderboard! 🏆")
-                    st.rerun()
-                else:
-                    st.warning("Please type a valid name before saving.")
-    else:
-        st.info("Score has been saved to the Leaderboard!")
-
-    if st.button("Rematch 🔄", use_container_width=True):
-        st.session_state.player_hp = 100
-        st.session_state.score = 0
-        st.session_state.level = 0
-        st.session_state.mon_hp = MONSTERS[0]["max_hp"]
-        st.session_state.saved = False
+    st.write("")
+    if st.button("🚀 ENTER THE OCTAGON (START FIGHT)", use_container_width=True):
+        st.session_state.game_started = True
         set_new_question()
         st.rerun()
 
-elif st.session_state.mon_hp <= 0:
-    trigger_sound("win")
-    st.balloons()
-    st.success(f"🎉 AND NEW! Defeated {curr_mon['name']} by TKO!")
-    if st.button("Next Round ➡️", use_container_width=True):
-        st.session_state.level += 1
-        st.session_state.mon_hp = MONSTERS[st.session_state.level % len(MONSTERS)]['max_hp']
-        st.session_state.score += 50
-        set_new_question()
-        st.rerun()
-
+# ==========================================
+# SCREEN 2: ACTIVE OCTAGON FIGHT ARENA
+# ==========================================
 else:
-    c_left, c_mid, c_right = st.columns([3, 1, 3])
+    # Top Bar: Round & Levels Indicator
+    st.markdown("<h2 style='text-align: center; color: #ff3333;'>🥊 QuestMath: UFC Octagon Arena ⚔️</h2>", unsafe_allow_html=True)
     
-    with c_left:
-        st.markdown(f"<center><b>{hero['icon']} {st.session_state.equipped_costume}</b><br><span style='color: #ffaa00;'>{hero['title']}</span></center>", unsafe_allow_html=True)
-        st.markdown(
-            f"""
-            <div style="display: flex; justify-content: center; margin: 10px 0;">
-                <img src="{hero['img']}" 
-                     referrerpolicy="no-referrer" 
-                     crossorigin="anonymous"
-                     onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/initials/svg?seed={st.session_state.equipped_costume}&backgroundColor=b71c1c';"
-                     style="width: 190px; height: 190px; object-fit: cover; object-position: top; background: #1c1c1c; border-radius: 16px; border: 3px solid #ff4444; box-shadow: 0 4px 15px rgba(255, 68, 68, 0.4);">
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-        st.progress(max(0.0, min(1.0, st.session_state.player_hp / 100.0)))
-        st.write(f"<center><b>HP: {st.session_state.player_hp} / 100</b></center>", unsafe_allow_html=True)
+    # Visual Level Progress
+    current_round_num = st.session_state.level + 1
+    total_rounds = len(MONSTERS)
+    
+    if st.session_state.level < total_rounds:
+        lvl_col1, lvl_col2 = st.columns([3, 1])
+        lvl_col1.markdown(f"### 🥋 **Level {current_round_num}/{total_rounds}:** {curr_mon['stage']}")
+        lvl_col2.button("🚪 Exit to Lobby", on_click=lambda: st.session_state.update(game_started=False))
+        st.progress(float(current_round_num) / float(total_rounds))
+    
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("⭐ Coins", st.session_state.score)
+    col2.metric("🔥 KO Streak", f"{st.session_state.streak}x")
+    col3.metric("🔫 Weapon", f"{gun['icon']} {st.session_state.equipped_gun}")
+    col4.metric("🥋 Fighter", f"{hero['icon']} {st.session_state.equipped_costume}")
+
+    st.divider()
+
+    # KNOCKED OUT SCREEN
+    if st.session_state.player_hp <= 0:
+        st.error(f"💀 KNOCKED OUT! Final Score: {st.session_state.score} | Round Reached: {current_round_num}")
         
-    with c_mid:
-        st.markdown("<h1 style='text-align: center; color: #ffaa00; margin-top: 60px;'>VS</h1>", unsafe_allow_html=True)
-        
-    with c_right:
-        st.markdown(f"<center><b>👾 {curr_mon['name']}</b><br><span style='color: #c084fc;'>Arena Challenger</span></center>", unsafe_allow_html=True)
-        st.image(curr_mon["img"], width=190)
-        st.progress(max(0.0, min(1.0, st.session_state.mon_hp / curr_mon["max_hp"])))
-        st.write(f"<center><b>HP: {st.session_state.mon_hp} / {curr_mon['max_hp']}</b></center>", unsafe_allow_html=True)
-
-    timer_style = (
-        "<style>"
-        "@keyframes shrinkTimer_" + str(st.session_state.q_id) + " {"
-        "  0% { width: 100%; background-color: #00ff7f; }"
-        "  70% { width: 30%; background-color: #ffaa00; }"
-        "  100% { width: 0%; background-color: #ff2222; }"
-        "}"
-        ".t-box { width: 100%; background: #222; border-radius: 8px; height: 14px; overflow: hidden; margin-top: 15px; }"
-        ".t-fill_" + str(st.session_state.q_id) + " { height: 100%; width: 100%; animation: shrinkTimer_" + str(st.session_state.q_id) + " " + str(curr_sec) + "s linear forwards; }"
-        "</style>"
-        "<div class='t-box'><div class='t-fill_" + str(st.session_state.q_id) + "'></div></div>"
-    )
-    st.markdown(timer_style, unsafe_allow_html=True)
-
-    st.info(f"### 🔥 What is: **{st.session_state.num1} {st.session_state.symbol} {st.session_state.num2}** ?")
-
-    user_input = st.number_input(
-        "Enter your answer:",
-        value=None,
-        step=1,
-        key=f"user_ans_box_{st.session_state.input_counter}",
-        placeholder="Type answer here..."
-    )
-
-    if st.button(f"⚡ STRIKE WITH {st.session_state.equipped_gun.upper()}!", use_container_width=True):
-        taken = time.time() - st.session_state.q_start
-        GRACE = 2.0
-
-        if user_input is None:
-            st.warning("⚠️ Please enter a number in the answer field before attacking!")
-        elif taken > (curr_sec + GRACE):
-            st.session_state.player_hp = max(0, st.session_state.player_hp - 20)
-            st.session_state.streak = 0
-            st.session_state.play_sound = "miss"
-            st.error(f"⏰ TIME UP! You took {int(taken)}s. Opponent countered for -20 HP!")
-            st.session_state.input_counter += 1
-            set_new_question()
-            time.sleep(0.4)
-            st.rerun()
+        if not st.session_state.saved:
+            with st.form("save_form"):
+                p_name = st.text_input("Enter Fighter Name for Hall of Fame:", max_chars=14, placeholder="Enter your name...")
+                if st.form_submit_button("💾 Save Score"):
+                    if p_name.strip():
+                        save_score(p_name.strip(), st.session_state.score, current_round_num)
+                        st.session_state.saved = True
+                        st.success("Score registered in the Leaderboard! 🏆")
+                        st.rerun()
+                    else:
+                        st.warning("Please type a valid name before saving.")
         else:
-            if user_input == st.session_state.ans:
-                st.session_state.play_sound = gun["type"]
-                streak_bonus = st.session_state.streak * (10 if st.session_state.equipped_gun == "MP40" else 5)
-                dmg = 30 + streak_bonus + gun["bonus"]
-                st.session_state.mon_hp = max(0, st.session_state.mon_hp - dmg)
-                st.session_state.score += 20
-                st.session_state.streak += 1
-                st.success(f"💥 CLEAN HIT! Dealt -{dmg} Damage with {st.session_state.equipped_gun}!")
-            else:
-                st.session_state.streak = 0
-                st.session_state.player_hp = max(0, st.session_state.player_hp - 10)
-                st.session_state.play_sound = "miss"
-                st.error(f"❌ Incorrect answer! Correct answer was: {st.session_state.ans}. Countered for -10 HP!")
+            st.info("Score has been saved to the Leaderboard!")
 
-            st.session_state.input_counter += 1
+        if st.button("Rematch 🔄", use_container_width=True):
+            st.session_state.player_hp = 100
+            st.session_state.score = 0
+            st.session_state.level = 0
+            st.session_state.mon_hp = MONSTERS[0]["max_hp"]
+            st.session_state.saved = False
             set_new_question()
-            time.sleep(0.4)
-            st.rerun()
