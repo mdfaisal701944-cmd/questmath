@@ -50,7 +50,7 @@ def trigger_sound(sound_type):
         "  try {"
         "    const AudioCtx = window.AudioContext || window.webkitAudioContext;"
         "    const ctx = new AudioCtx();"
-        "    const type = '" + sound_type + "';"
+        "    const type = '" + str(sound_type) + "';"
         "    function makeNoise() {"
         "      const b = ctx.createBuffer(1, ctx.sampleRate * 0.4, ctx.sampleRate);"
         "      const d = b.getChannelData(0);"
@@ -360,7 +360,6 @@ else:
 
     # ACTIVE COMBAT
     else:
-        # Fighters UI
         fc1, fc2 = st.columns(2)
         with fc1:
             st.markdown(f"**{hero['icon']} {st.session_state.equipped_costume}**")
@@ -373,31 +372,33 @@ else:
 
         st.progress(float(max(0, min(100, int(st.session_state.mon_hp * 100 / curr_mon['max_hp'])))) / 100.0)
 
-        # LIVE SHRINKING TIMER (Progress Animation)
-        timer_tag = (
-            "<div style='margin: 10px 0;'>"
-            "<style>"
-            "@keyframes timerShrink { from { width: 100%; background: #22c55e; } to { width: 0%; background: #ef4444; } }"
-            ".t-wrap { width: 100%; height: 12px; background: #374151; border-radius: 6px; overflow: hidden; }"
-            f".t-core_{st.session_state.q_id} {{ height: 100%; animation: timerShrink {curr_sec}s linear forwards; }}"
-            "</style>"
-            f"<div class='t-wrap'><div class='t-core_{st.session_state.q_id}'></div></div>"
-            "</div>"
+        # Stable Animated Progress Timer Bar (No string interpolation bugs)
+        st.components.v1.html(
+            f"""
+            <div style="width: 100%; height: 14px; background: #374151; border-radius: 7px; overflow: hidden; margin-top: 5px;">
+                <div id="bar" style="height: 100%; width: 100%; background: #22c55e; transition: width {curr_sec}s linear, background-color {curr_sec}s linear;"></div>
+            </div>
+            <script>
+                setTimeout(function() {{
+                    var el = document.getElementById("bar");
+                    if (el) {{
+                        el.style.width = "0%";
+                        el.style.backgroundColor = "#ef4444";
+                    }}
+                }}, 50);
+            </script>
+            """,
+            height=25
         )
-        st.markdown(timer_tag, unsafe_allow_html=True)
         st.caption(f"⏱️ Attack Window: **{curr_sec} Seconds**")
 
-        # Feedback from previous hit
         if st.session_state.last_msg:
             m_type, m_txt = st.session_state.last_msg
             if m_type == "hit":
                 st.success(m_txt)
-            elif m_type == "timeout":
-                st.error(m_txt)
             else:
                 st.error(m_txt)
 
-        # Question & Form Submit (Clears input instantly without freezing)
         st.info(f"### 🔥 What is: **{st.session_state.num1} {st.session_state.symbol} {st.session_state.num2}** ?")
 
         with st.form("fight_strike_form", clear_on_submit=True):
@@ -405,4 +406,5 @@ else:
             strike_pressed = st.form_submit_button(f"⚡ STRIKE WITH {st.session_state.equipped_gun.upper()}!", use_container_width=True)
 
         if strike_pressed:
-            t
+            taken = time.time() - st.session_state.q_start
+            GRACE = 2.0
