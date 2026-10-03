@@ -99,7 +99,6 @@ def trigger_sound(sound_type):
     )
     st.components.v1.html(js_code, height=0, width=0)
 
-# 12 UFC Superstars
 CHARACTERS = {
     "Sean O'Malley": {"price": 0, "title": "Suga Show", "icon": "🍭", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/4285679.png&w=260&h=200"},
     "Max Holloway": {"price": 25, "title": "Blessed BMF", "icon": "🌴", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2614933.png&w=260&h=200"},
@@ -108,8 +107,8 @@ CHARACTERS = {
     "Charles Oliveira": {"price": 120, "title": "Do Bronx", "icon": "🦁", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2504169.png&w=260&h=200"},
     "Israel Adesanya": {"price": 160, "title": "Stylebender", "icon": "⚡", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3154170.png&w=260&h=200"},
     "Alex Pereira": {"price": 200, "title": "Poatan", "icon": "🗿", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/4898396.png&w=260&h=200"},
-    "Islam Makhachev": {"price": 250, "title": "P4P King", "icon": "🥋", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Islam_Makhachev_2022_UFC_belt_%28cropped%29.png/330px-Islam_Makhachev_2022_UFC_belt_%28cropped%29.png"},
-    "Khamzat Chimaev": {"price": 300, "title": "Borz", "icon": "🐺", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Khamzat_Chimaev_2022_%28cropped%29.png/330px-Khamzat_Chimaev_2022_%28cropped%29.png"},
+    "Islam Makhachev": {"price": 250, "title": "P4P King", "icon": "🥋", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3153839.png&w=260&h=200"},
+    "Khamzat Chimaev": {"price": 300, "title": "Borz", "icon": "🐺", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/4422324.png&w=260&h=200"},
     "Jon Jones": {"price": 360, "title": "Bones GOAT", "icon": "👑", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2335639.png&w=260&h=200"},
     "Conor McGregor": {"price": 420, "title": "The Notorious", "icon": "🇮🇪", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3022677.png&w=260&h=200"},
     "Khabib Nurmagomedov": {"price": 500, "title": "The Eagle", "icon": "🦅", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2611557.png&w=260&h=200"}
@@ -170,7 +169,6 @@ def set_new_question():
     st.session_state.q_start = time.time()
     st.session_state.q_id += 1
 
-# Initializations
 if "game_started" not in st.session_state: st.session_state.game_started = False
 if "level" not in st.session_state: st.session_state.level = 0
 if "score" not in st.session_state: st.session_state.score = 0
@@ -205,7 +203,6 @@ if st.session_state.play_sound:
     trigger_sound(st.session_state.play_sound)
     st.session_state.play_sound = None
 
-# Sidebar
 with st.sidebar:
     st.title("🏆 Leaderboard")
     current_board = load_leaderboard()
@@ -216,7 +213,7 @@ with st.sidebar:
     else:
         st.caption("No records yet.")
 
-    if st.button("🗑️ Reset Leaderboard"):
+    if st.button("🗑️️ Reset Leaderboard"):
         reset_leaderboard()
         st.success("Cleared!")
         st.rerun()
@@ -272,7 +269,7 @@ with st.sidebar:
 
     st.markdown("---")
     t_choice = st.selectbox(
-        "⏱️️ Attack Timer:", 
+        "⏱ Attack Timer:", 
         list(TIMER_MAP.keys()), 
         index=list(TIMER_MAP.keys()).index(st.session_state.timer_choice)
     )
@@ -291,17 +288,10 @@ with st.sidebar:
         set_new_question()
         st.rerun()
 
-# -----------------
-# LOBBY SCREEN
-# -----------------
+# SCREEN 1: LOBBY
 if not st.session_state.game_started:
-    st.markdown("<h1 style='text-align: center; color: #ff3333;'>🥊 QUESTMATH: UFC ARENA ⚔️</h1>", unsafe_allow_html=True)
-    st.info("""
-    ### 🎯 Road To Championship:
-    * 🥋 **Round 1:** Grumble Goblin *(100 HP)*
-    * 🐉 **Round 2:** Shadow Dragon *(180 HP)*
-    * 🤖 **Round 3:** Titan Mecha *(World Championship - 260 HP)*
-    """)
+    st.title("🥊 QUESTMATH: UFC ARENA")
+    st.info("### 🎯 Road To Championship:\n* Round 1: Grumble Goblin\n* Round 2: Shadow Dragon\n* Round 3: Titan Mecha (World Championship)")
     st.write(f"🥋 **Selected Fighter:** {hero['icon']} **{st.session_state.equipped_costume}**")
     st.write(f"🔫 **Equipped Weapon:** {gun['icon']} **{st.session_state.equipped_gun}**")
     
@@ -313,26 +303,21 @@ if not st.session_state.game_started:
         set_new_question()
         st.rerun()
 
-# -----------------
-# FIGHT SCREEN
-# -----------------
+# SCREEN 2: FIGHT ARENA
 else:
     current_round_num = st.session_state.level + 1
     total_rounds = len(MONSTERS)
     
-    # Header & Quick Exit
     top_col1, top_col2 = st.columns([3, 1])
-    top_col1.markdown(f"#### 🥊 **Level {current_round_num}/{total_rounds}:** {curr_mon['stage']}")
+    top_col1.markdown(f"#### 🥊 Level {current_round_num}/{total_rounds}: {curr_mon['stage']}")
     top_col2.button("🚪 Exit", on_click=lambda: st.session_state.update(game_started=False))
     
-    # Compact Metrics Row
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("⭐ Coins", st.session_state.score)
     m2.metric("🔥 Streak", f"{st.session_state.streak}x")
     m3.metric("❤️ You", f"{st.session_state.player_hp}")
     m4.metric("👾 Monster", f"{st.session_state.mon_hp}")
 
-    # KNOCKED OUT
     if st.session_state.player_hp <= 0:
         st.error(f"💀 KNOCKED OUT! Round: {current_round_num} | Score: {st.session_state.score}")
         if st.button("Rematch 🔄", use_container_width=True):
@@ -343,7 +328,6 @@ else:
             set_new_question()
             st.rerun()
 
-    # ROUND WON / CHAMPION
     elif st.session_state.mon_hp <= 0:
         trigger_sound("win")
         st.balloons()
@@ -365,38 +349,58 @@ else:
                 set_new_question()
                 st.rerun()
 
-    # ACTIVE COMBAT
     else:
-        # Side-by-side fighter and monster images
         fc1, fc2 = st.columns(2)
         with fc1:
-            st.markdown(
-                "<div style='text-align: center; background: #161b22; padding: 8px; border-radius: 12px; border: 2px solid #e63946;'>"
-                "<b style='font-size: 13px; color: #fff;'>" + hero['icon'] + " " + st.session_state.equipped_costume + "</b><br>"
-                "<img src='" + hero['img'] + "' style='width: 90px; height: 90px; object-fit: cover; border-radius: 50%; margin: 6px auto; display: block; border: 2px solid #ff4444;'>"
-                "<span style='font-size: 12px; color: #4ade80;'>❤️ HP: " + str(st.session_state.player_hp) + "/100</span>"
-                "</div>", 
-                unsafe_allow_html=True
-            )
+            st.markdown(f"**{hero['icon']} {st.session_state.equipped_costume}**")
+            st.image(hero["img"], width=130)
+            st.caption(f"HP: {st.session_state.player_hp}/100")
         with fc2:
-            st.markdown(
-                "<div style='text-align: center; background: #161b22; padding: 8px; border-radius: 12px; border: 2px solid #8b5cf6;'>"
-                "<b style='font-size: 13px; color: #fff;'>👾 " + curr_mon['name'] + "</b><br>"
-                "<img src='" + curr_mon['img'] + "' style='width: 90px; height: 90px; object-fit: contain; margin: 6px auto; display: block;'>"
-                "<span style='font-size: 12px; color: #f87171;'>❤️ HP: " + str(st.session_state.mon_hp) + "/" + str(curr_mon['max_hp']) + "</span>"
-                "</div>", 
-                unsafe_allow_html=True
-            )
+            st.markdown(f"**👾 {curr_mon['name']}**")
+            st.image(curr_mon["img"], width=130)
+            st.caption(f"HP: {st.session_state.mon_hp}/{curr_mon['max_hp']}")
 
-        # Dynamic animated timer bar
-        anim_id = str(st.session_state.q_id)
-        anim_sec = str(curr_sec)
-        timer_html = (
-            "<style>"
-            "@keyframes animTimer_" + anim_id + " {"
-            "  0% { width: 100%; background-color: #22c55e; }"
-            "  60% { width: 35%; background-color: #f59e0b; }"
-            "  100% { width: 0%; background-color: #ef4444; }"
-            "}"
-            ".t-track { width: 100%; height: 12px; background: #2d3748; border-radius: 6px; overflow: hidden; margin: 14px 0 8px 0; }"
-            ".t-bar_" + anim_id + " { height: 100%; width: 100%;
+        st.progress(float(max(0, min(100, int(st.session_state.mon_hp * 100 / curr_mon['max_hp'])))) / 100.0)
+        st.warning(f"⏱️ Attack Window: **{curr_sec} Seconds**")
+
+        st.info(f"### 🔥 What is: **{st.session_state.num1} {st.session_state.symbol} {st.session_state.num2}** ?")
+
+        user_input = st.number_input(
+            "Answer:",
+            value=None,
+            step=1,
+            key=f"ans_box_{st.session_state.input_counter}",
+            placeholder="Type answer..."
+        )
+
+        if st.button(f"⚡ STRIKE WITH {st.session_state.equipped_gun.upper()}!", use_container_width=True):
+            taken = time.time() - st.session_state.q_start
+            GRACE = 2.0
+
+            if user_input is None:
+                st.warning("⚠️ Enter your answer first!")
+            elif taken > (curr_sec + GRACE):
+                st.session_state.player_hp = max(0, st.session_state.player_hp - 20)
+                st.session_state.streak = 0
+                st.session_state.play_sound = "miss"
+                st.error("⏰ TIME UP! Opponent countered for -20 HP!")
+                st.session_state.input_counter += 1
+                set_new_question()
+                time.sleep(0.3)
+                st.rerun()
+            else:
+                if user_input == st.session_state.ans:
+                    st.session_state.play_sound = gun["type"]
+                    streak_bonus = st.session_state.streak * 5
+                    dmg = 30 + streak_bonus + gun["bonus"]
+                    st.session_state.mon_hp = max(0, st.session_state.mon_hp - dmg)
+                    st.session_state.score += 20
+                    st.session_state.streak += 1
+                    st.success(f"💥 HIT! Dealt -{dmg} Dmg!")
+                else:
+                    st.session_state.streak = 0
+                    st.session_state.player_hp = max(0, st.session_state.player_hp - 10)
+                    st.session_state.play_sound = "miss"
+                    st.error(f"❌ Wrong! Correct answer: {st.session_state.ans}. Took -10 HP!")
+
+                st.session_state.input_counter += 1
