@@ -99,7 +99,7 @@ def trigger_sound(sound_type):
     )
     st.components.v1.html(js_code, height=0, width=0)
 
-# 12 UFC Superstars (High-speed reliable direct images)
+# 12 UFC Superstars
 CHARACTERS = {
     "Sean O'Malley": {"price": 0, "title": "Suga Show", "icon": "🍭", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/4285679.png&w=260&h=200"},
     "Max Holloway": {"price": 25, "title": "Blessed BMF", "icon": "🌴", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2614933.png&w=260&h=200"},
@@ -108,8 +108,8 @@ CHARACTERS = {
     "Charles Oliveira": {"price": 120, "title": "Do Bronx", "icon": "🦁", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2504169.png&w=260&h=200"},
     "Israel Adesanya": {"price": 160, "title": "Stylebender", "icon": "⚡", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3154170.png&w=260&h=200"},
     "Alex Pereira": {"price": 200, "title": "Poatan", "icon": "🗿", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/4898396.png&w=260&h=200"},
-    "Islam Makhachev": {"price": 250, "title": "P4P King", "icon": "🥋", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3153839.png&w=260&h=200"},
-    "Khamzat Chimaev": {"price": 300, "title": "Borz", "icon": "🐺", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/4422324.png&w=260&h=200"},
+    "Islam Makhachev": {"price": 250, "title": "P4P King", "icon": "🥋", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Islam_Makhachev_2022_UFC_belt_%28cropped%29.png/330px-Islam_Makhachev_2022_UFC_belt_%28cropped%29.png"},
+    "Khamzat Chimaev": {"price": 300, "title": "Borz", "icon": "🐺", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Khamzat_Chimaev_2022_%28cropped%29.png/330px-Khamzat_Chimaev_2022_%28cropped%29.png"},
     "Jon Jones": {"price": 360, "title": "Bones GOAT", "icon": "👑", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2335639.png&w=260&h=200"},
     "Conor McGregor": {"price": 420, "title": "The Notorious", "icon": "🇮🇪", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3022677.png&w=260&h=200"},
     "Khabib Nurmagomedov": {"price": 500, "title": "The Eagle", "icon": "🦅", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2611557.png&w=260&h=200"}
@@ -272,7 +272,7 @@ with st.sidebar:
 
     st.markdown("---")
     t_choice = st.selectbox(
-        "⏱️ Attack Timer:", 
+        "⏱️️ Attack Timer:", 
         list(TIMER_MAP.keys()), 
         index=list(TIMER_MAP.keys()).index(st.session_state.timer_choice)
     )
@@ -291,7 +291,9 @@ with st.sidebar:
         set_new_question()
         st.rerun()
 
+# -----------------
 # LOBBY SCREEN
+# -----------------
 if not st.session_state.game_started:
     st.markdown("<h1 style='text-align: center; color: #ff3333;'>🥊 QUESTMATH: UFC ARENA ⚔️</h1>", unsafe_allow_html=True)
     st.info("""
@@ -311,7 +313,9 @@ if not st.session_state.game_started:
         set_new_question()
         st.rerun()
 
+# -----------------
 # FIGHT SCREEN
+# -----------------
 else:
     current_round_num = st.session_state.level + 1
     total_rounds = len(MONSTERS)
@@ -363,48 +367,36 @@ else:
 
     # ACTIVE COMBAT
     else:
-        # Side-by-side fighter and monster images (Responsive Mobile Layout)
+        # Side-by-side fighter and monster images
         fc1, fc2 = st.columns(2)
         with fc1:
             st.markdown(
-                f"""
-                <div style="text-align: center; background: #161b22; padding: 8px; border-radius: 12px; border: 2px solid #e63946;">
-                    <b style="font-size: 13px; color: #fff;">{hero['icon']} {st.session_state.equipped_costume}</b><br>
-                    <img src="{hero['img']}" style="width: 90px; height: 90px; object-fit: cover; border-radius: 50%; margin: 6px auto; display: block; border: 2px solid #ff4444;">
-                    <span style="font-size: 12px; color: #4ade80;">❤️ HP: {st.session_state.player_hp}/100</span>
-                </div>
-                """, 
+                "<div style='text-align: center; background: #161b22; padding: 8px; border-radius: 12px; border: 2px solid #e63946;'>"
+                "<b style='font-size: 13px; color: #fff;'>" + hero['icon'] + " " + st.session_state.equipped_costume + "</b><br>"
+                "<img src='" + hero['img'] + "' style='width: 90px; height: 90px; object-fit: cover; border-radius: 50%; margin: 6px auto; display: block; border: 2px solid #ff4444;'>"
+                "<span style='font-size: 12px; color: #4ade80;'>❤️ HP: " + str(st.session_state.player_hp) + "/100</span>"
+                "</div>", 
                 unsafe_allow_html=True
             )
         with fc2:
             st.markdown(
-                f"""
-                <div style="text-align: center; background: #161b22; padding: 8px; border-radius: 12px; border: 2px solid #8b5cf6;">
-                    <b style="font-size: 13px; color: #fff;">👾 {curr_mon['name']}</b><br>
-                    <img src="{curr_mon['img']}" style="width: 90px; height: 90px; object-fit: contain; margin: 6px auto; display: block;">
-                    <span style="font-size: 12px; color: #f87171;">❤️ HP: {st.session_state.mon_hp}/{curr_mon['max_hp']}</span>
-                </div>
-                """, 
+                "<div style='text-align: center; background: #161b22; padding: 8px; border-radius: 12px; border: 2px solid #8b5cf6;'>"
+                "<b style='font-size: 13px; color: #fff;'>👾 " + curr_mon['name'] + "</b><br>"
+                "<img src='" + curr_mon['img'] + "' style='width: 90px; height: 90px; object-fit: contain; margin: 6px auto; display: block;'>"
+                "<span style='font-size: 12px; color: #f87171;'>❤️ HP: " + str(st.session_state.mon_hp) + "/" + str(curr_mon['max_hp']) + "</span>"
+                "</div>", 
                 unsafe_allow_html=True
             )
 
-        # Dynamic shrinking timer bar
-        timer_html = f"""
-        <style>
-        @keyframes shrinkTimer_{st.session_state.q_id} {{
-            0% {{ width: 100%; background-color: #22c55e; }}
-            60% {{ width: 35%; background-color: #f59e0b; }}
-            100% {{ width: 0%; background-color: #ef4444; }}
-        }}
-        .timer-bg {{
-            width: 100%;
-            height: 12px;
-            background-color: #2d3748;
-            border-radius: 6px;
-            overflow: hidden;
-            margin: 14px 0 8px 0;
-        }}
-        .timer-bar_{st.session_state.q_id} {{
-            height: 100%;
-            width: 100%;
-            animation: shrinkTimer_{st.session_state.q_id} {curr_sec}s linear forward
+        # Dynamic animated timer bar
+        anim_id = str(st.session_state.q_id)
+        anim_sec = str(curr_sec)
+        timer_html = (
+            "<style>"
+            "@keyframes animTimer_" + anim_id + " {"
+            "  0% { width: 100%; background-color: #22c55e; }"
+            "  60% { width: 35%; background-color: #f59e0b; }"
+            "  100% { width: 0%; background-color: #ef4444; }"
+            "}"
+            ".t-track { width: 100%; height: 12px; background: #2d3748; border-radius: 6px; overflow: hidden; margin: 14px 0 8px 0; }"
+            ".t-bar_" + anim_id + " { height: 100%; width: 100%;
