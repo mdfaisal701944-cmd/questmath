@@ -142,30 +142,43 @@ def generate_question(op, lvl, sec):
         elif sec <= 8: n1, n2 = random.randint(3, 9), random.randint(3, 9)
         elif sec <= 15: n1, n2 = random.randint(6, 12), random.randint(6, 12)
         else: n1, n2 = random.randint(11, 20), random.randint(6, 15)
-        return n1, n2, "×", n1 * n2
+        ans = n1 * n2
+        sym = "×"
     elif op == "Addition (+)":
         if sec <= 4: n1, n2 = random.randint(5, 20), random.randint(5, 20)
         elif sec <= 8: n1, n2 = random.randint(20, 60), random.randint(15, 50)
-        elif sec <= 15: n1, n2 = random.randint(50, 150), random.randint(40, 100)
-        else: n1, n2 = random.randint(150, 500), random.randint(100, 400)
-        return n1, n2, "+", n1 + n2
+        else: n1, n2 = random.randint(50, 150), random.randint(40, 100)
+        ans = n1 + n2
+        sym = "+"
     elif op == "Subtraction (−)":
         if sec <= 4: n1 = random.randint(10, 25); n2 = random.randint(2, n1 - 1)
-        elif sec <= 8: n1 = random.randint(30, 80); n2 = random.randint(10, n1 - 1)
-        else: n1 = random.randint(80, 250); n2 = random.randint(20, n1 - 1)
-        return n1, n2, "−", n1 - n2
+        else: n1 = random.randint(30, 80); n2 = random.randint(10, n1 - 1)
+        ans = n1 - n2
+        sym = "−"
     else:
         ans = random.randint(2, 10)
         n2 = random.randint(2, 6)
-        return ans * n2, n2, "÷", ans
+        n1 = ans * n2
+        sym = "÷"
+    
+    # 4 Unique Options
+    opts = {ans}
+    while len(opts) < 4:
+        wrong = ans + random.choice([-10, -5, -2, -1, 1, 2, 3, 5, 10])
+        if wrong >= 0 and wrong != ans:
+            opts.add(wrong)
+    opt_list = list(opts)
+    random.shuffle(opt_list)
+    return n1, n2, sym, ans, opt_list
 
 def set_new_question():
     sec = TIMER_MAP.get(st.session_state.timer_choice, 8)
-    n1, n2, sym, a = generate_question(st.session_state.operation, st.session_state.level, sec)
+    n1, n2, sym, a, opts = generate_question(st.session_state.operation, st.session_state.level, sec)
     st.session_state.num1 = n1
     st.session_state.num2 = n2
     st.session_state.symbol = sym
     st.session_state.ans = a
+    st.session_state.options = opts
     st.session_state.q_start = time.time()
     st.session_state.q_id += 1
 
@@ -196,7 +209,7 @@ gun = FF_GUNS.get(st.session_state.equipped_gun, FF_GUNS["G18 Pistol"])
 if "mon_hp" not in st.session_state or st.session_state.mon_hp <= 0:
     st.session_state.mon_hp = curr_mon["max_hp"]
 
-if "num1" not in st.session_state:
+if "num1" not in st.session_state or "options" not in st.session_state:
     set_new_question()
 
 if st.session_state.play_sound:
@@ -289,7 +302,9 @@ with st.sidebar:
         set_new_question()
         st.rerun()
 
+# -----------------
 # SCREEN 1: LOBBY
+# -----------------
 if not st.session_state.game_started:
     st.title("🥊 QUESTMATH: UFC ARENA")
     st.info("### 🎯 Road To Championship:\n* Round 1: Grumble Goblin\n* Round 2: Shadow Dragon\n* Round 3: Titan Mecha (World Championship)")
@@ -305,7 +320,9 @@ if not st.session_state.game_started:
         set_new_question()
         st.rerun()
 
+# -----------------
 # SCREEN 2: FIGHT ARENA
+# -----------------
 else:
     current_round_num = st.session_state.level + 1
     total_rounds = len(MONSTERS)
@@ -372,7 +389,7 @@ else:
 
         st.progress(float(max(0, min(100, int(st.session_state.mon_hp * 100 / curr_mon['max_hp'])))) / 100.0)
 
-        # Stable Animated Progress Timer Bar (No string interpolation bugs)
+        # Shrinking timer animation
         st.components.v1.html(
             f"""
             <div style="width: 100%; height: 14px; background: #374151; border-radius: 7px; overflow: hidden; margin-top: 5px;">
@@ -400,11 +417,7 @@ else:
                 st.error(m_txt)
 
         st.info(f"### 🔥 What is: **{st.session_state.num1} {st.session_state.symbol} {st.session_state.num2}** ?")
+        st.caption("👇 Sahi answer par click karke strike karo:")
 
-        with st.form("fight_strike_form", clear_on_submit=True):
-            user_input = st.number_input("Enter Answer:", value=None, step=1, placeholder="Type answer...")
-            strike_pressed = st.form_submit_button(f"⚡ STRIKE WITH {st.session_state.equipped_gun.upper()}!", use_container_width=True)
-
-        if strike_pressed:
-            taken = time.time() - st.session_state.q_start
-            GRACE = 2.0
+        # 4 Responsive Option Buttons (Direct 1-touch strike)
+        btn_col1, btn_col2 =
