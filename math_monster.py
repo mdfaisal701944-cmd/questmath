@@ -38,6 +38,13 @@ def save_score(name, score, level):
 CHARACTERS = {
     "Sean O'Malley": {"price": 0, "title": "Suga Show", "icon": "🍭", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/4285679.png&w=260&h=200"},
     "Max Holloway": {"price": 25, "title": "Blessed BMF", "icon": "🌴", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2614933.png&w=260&h=200"},
+    "Justin Gaethje": {"price": 50, "title": "The Highlight", "icon": "💥", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2984180.png&w=260&h=200"},
+    "Dustin Poirier": {"price": 80, "title": "The Diamond", "icon": "💎", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2508115.png&w=260&h=200"},
+    "Charles Oliveira": {"price": 120, "title": "Do Bronx", "icon": "🦁", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2504169.png&w=260&h=200"},
+    "Israel Adesanya": {"price": 160, "title": "Stylebender", "icon": "⚡", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3154170.png&w=260&h=200"},
+    "Alex Pereira": {"price": 200, "title": "Poatan", "icon": "🗿", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/4898396.png&w=260&h=200"},
+    "Islam Makhachev": {"price": 250, "title": "P4P King", "icon": "🥋", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Islam_Makhachev_2022_UFC_belt_%28cropped%29.png/330px-Islam_Makhachev_2022_UFC_belt_%28cropped%29.png"},
+    "Khamzat Chimaev": {"price": 300, "title": "Borz", "icon": "🐺", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Khamzat_Chimaev_2022_%28cropped%29.png/330px-Khamzat_Chimaev_2022_%28cropped%29.png"},
     "Jon Jones": {"price": 360, "title": "Bones GOAT", "icon": "👑", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2335639.png&w=260&h=200"},
     "Conor McGregor": {"price": 420, "title": "The Notorious", "icon": "🇮🇪", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3022677.png&w=260&h=200"},
     "Khabib Nurmagomedov": {"price": 500, "title": "The Eagle", "icon": "🦅", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2611557.png&w=260&h=200"}
@@ -147,7 +154,7 @@ else:
             set_new_question()
             st.rerun()
 
-    # ROUND WON / FINISH
+    # ROUND WON
     elif st.session_state.mon_hp <= 0:
         st.balloons()
         if st.session_state.level >= total_rounds - 1:
@@ -172,8 +179,34 @@ else:
 
     # ACTIVE COMBAT
     else:
-        st.image(curr_mon["img"], width=120)
-        st.progress(float(max(0, min(100, int(st.session_state.mon_hp * 100 / curr_mon['max_hp'])))) / 100.0)
+        # Side-by-side fighter and monster images
+        img_c1, img_c2 = st.columns(2)
+        with img_c1:
+            st.caption(f"{hero['icon']} {st.session_state.equipped_costume}")
+            st.image(hero["img"], width=120)
+        with img_c2:
+            st.caption(f"👾 {curr_mon['name']}")
+            st.image(curr_mon["img"], width=120)
+
+        # Shrinking Live Timer Bar
+        st.components.v1.html(
+            f"""
+            <div style="width: 100%; height: 12px; background: #333; border-radius: 6px; overflow: hidden; margin-top: 5px;">
+                <div id="tbar" style="height: 100%; width: 100%; background: #22c55e; transition: width {curr_sec}s linear, background 0.5s;"></div>
+            </div>
+            <script>
+                setTimeout(function() {{
+                    var b = document.getElementById("tbar");
+                    if (b) {{
+                        b.style.width = "0%";
+                        b.style.background = "#ef4444";
+                    }}
+                }}, 50);
+            </script>
+            """,
+            height=25
+        )
+        st.caption(f"⏱️ Attack Window: **{curr_sec} Seconds**")
 
         if st.session_state.last_msg:
             m_type, m_txt = st.session_state.last_msg
