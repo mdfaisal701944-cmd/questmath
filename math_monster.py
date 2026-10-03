@@ -99,88 +99,27 @@ def trigger_sound(sound_type):
     )
     st.components.v1.html(js_code, height=0, width=0)
 
-# 12 UFC Superstars
 CHARACTERS = {
-    "Khabib Nurmagomedov": {
-        "price": 500,
-        "title": "The Eagle (29-0 Undefeated Legend)",
-        "icon": "🦅",
-        "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2611557.png&w=350&h=254"
-    },
-    "Conor McGregor": {
-        "price": 420,
-        "title": "The Notorious Champ",
-        "icon": "🇮🇪",
-        "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3022677.png&w=350&h=254"
-    },
-    "Jon Jones": {
-        "price": 360,
-        "title": "Bones (Heavyweight GOAT)",
-        "icon": "👑",
-        "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2335639.png&w=350&h=254"
-    },
-    "Khamzat Chimaev": {
-        "price": 300,
-        "title": "Borz (Smash Everybody)",
-        "icon": "🐺",
-        "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Khamzat_Chimaev_2022_%28cropped%29.png/330px-Khamzat_Chimaev_2022_%28cropped%29.png"
-    },
-    "Islam Makhachev": {
-        "price": 250,
-        "title": "P4P King & Lightweight Champ",
-        "icon": "🥋",
-        "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Islam_Makhachev_2022_UFC_belt_%28cropped%29.png/330px-Islam_Makhachev_2022_UFC_belt_%28cropped%29.png"
-    },
-    "Alex Pereira": {
-        "price": 200,
-        "title": "Poatan (Stone Hands)",
-        "icon": "🗿",
-        "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/4898396.png&w=350&h=254"
-    },
-    "Israel Adesanya": {
-        "price": 160,
-        "title": "The Last Stylebender",
-        "icon": "⚡",
-        "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3154170.png&w=350&h=254"
-    },
-    "Charles Oliveira": {
-        "price": 120,
-        "title": "Do Bronx (Submission King)",
-        "icon": "🦁",
-        "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2504169.png&w=350&h=254"
-    },
-    "Dustin Poirier": {
-        "price": 80,
-        "title": "The Diamond",
-        "icon": "💎",
-        "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2508115.png&w=350&h=254"
-    },
-    "Justin Gaethje": {
-        "price": 50,
-        "title": "The Highlight",
-        "icon": "💥",
-        "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2984180.png&w=350&h=254"
-    },
-    "Max Holloway": {
-        "price": 25,
-        "title": "Blessed (BMF)",
-        "icon": "🌴",
-        "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2614933.png&w=350&h=254"
-    },
-    "Sean O'Malley": {
-        "price": 0,
-        "title": "Suga Show (Starter Fighter)",
-        "icon": "🍭",
-        "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/4285679.png&w=350&h=254"
-    }
+    "Khabib Nurmagomedov": {"price": 500, "title": "The Eagle", "icon": "🦅", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2611557.png&w=350&h=254"},
+    "Conor McGregor": {"price": 420, "title": "The Notorious", "icon": "🇮🇪", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3022677.png&w=350&h=254"},
+    "Jon Jones": {"price": 360, "title": "Bones GOAT", "icon": "👑", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2335639.png&w=350&h=254"},
+    "Khamzat Chimaev": {"price": 300, "title": "Borz", "icon": "🐺", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Khamzat_Chimaev_2022_%28cropped%29.png/330px-Khamzat_Chimaev_2022_%28cropped%29.png"},
+    "Islam Makhachev": {"price": 250, "title": "P4P King", "icon": "🥋", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Islam_Makhachev_2022_UFC_belt_%28cropped%29.png/330px-Islam_Makhachev_2022_UFC_belt_%28cropped%29.png"},
+    "Alex Pereira": {"price": 200, "title": "Poatan", "icon": "🗿", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/4898396.png&w=350&h=254"},
+    "Israel Adesanya": {"price": 160, "title": "Stylebender", "icon": "⚡", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/3154170.png&w=350&h=254"},
+    "Charles Oliveira": {"price": 120, "title": "Do Bronx", "icon": "🦁", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2504169.png&w=350&h=254"},
+    "Dustin Poirier": {"price": 80, "title": "The Diamond", "icon": "💎", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2508115.png&w=350&h=254"},
+    "Justin Gaethje": {"price": 50, "title": "The Highlight", "icon": "💥", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2984180.png&w=350&h=254"},
+    "Max Holloway": {"price": 25, "title": "Blessed BMF", "icon": "🌴", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/2614933.png&w=350&h=254"},
+    "Sean O'Malley": {"price": 0, "title": "Suga Show", "icon": "🍭", "img": "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/4285679.png&w=350&h=254"}
 }
 
 FF_GUNS = {
     "G18 Pistol": {"price": 0, "bonus": 0, "icon": "🔫", "type": "pistol", "desc": "Standard sidearm"},
-    "SCAR": {"price": 45, "bonus": 25, "icon": "🎯", "type": "rifle", "desc": "Solid assault firepower"},
-    "MP40": {"price": 90, "bonus": 45, "icon": "⚡", "type": "smg", "desc": "Double streak multiplier"},
-    "M1887 Shotgun": {"price": 160, "bonus": 85, "icon": "💥", "type": "shotgun", "desc": "Devastating close-range blast"},
-    "AWM Sniper": {"price": 250, "bonus": 130, "icon": "🔭", "type": "sniper", "desc": "Extreme sniper impact"}
+    "SCAR": {"price": 45, "bonus": 25, "icon": "🎯", "type": "rifle", "desc": "Assault firepower"},
+    "MP40": {"price": 90, "bonus": 45, "icon": "⚡", "type": "smg", "desc": "Streak multiplier"},
+    "M1887 Shotgun": {"price": 160, "bonus": 85, "icon": "💥", "type": "shotgun", "desc": "Close blast"},
+    "AWM Sniper": {"price": 250, "bonus": 130, "icon": "🔭", "type": "sniper", "desc": "Extreme damage"}
 }
 
 MONSTERS = [
@@ -230,12 +169,13 @@ def set_new_question():
     st.session_state.q_start = time.time()
     st.session_state.q_id += 1
 
-# Initializations
+# Safe Inits
 if "game_started" not in st.session_state: st.session_state.game_started = False
 if "level" not in st.session_state: st.session_state.level = 0
 if "score" not in st.session_state: st.session_state.score = 0
 if "streak" not in st.session_state: st.session_state.streak = 0
-if "player_hp" not in st.session_state: st.session_state.player_hp = 100
+if "player_hp" not in st.session_state or st.session_state.player_hp <= 0:
+    st.session_state.player_hp = 100
 if "guns_owned" not in st.session_state: st.session_state.guns_owned = ["G18 Pistol"]
 if "equipped_gun" not in st.session_state: st.session_state.equipped_gun = "G18 Pistol"
 if "costumes_owned" not in st.session_state: st.session_state.costumes_owned = ["Sean O'Malley"]
@@ -251,12 +191,13 @@ if "play_sound" not in st.session_state: st.session_state.play_sound = None
 if "input_counter" not in st.session_state: st.session_state.input_counter = 0
 
 curr_sec = TIMER_MAP.get(st.session_state.timer_choice, 8)
-safe_level = min(st.session_state.level, len(MONSTERS) - 1)
+safe_level = min(max(0, st.session_state.level), len(MONSTERS) - 1)
 curr_mon = MONSTERS[safe_level]
 hero = CHARACTERS.get(st.session_state.equipped_costume, CHARACTERS["Sean O'Malley"])
 gun = FF_GUNS.get(st.session_state.equipped_gun, FF_GUNS["G18 Pistol"])
 
-if "mon_hp" not in st.session_state: st.session_state.mon_hp = curr_mon["max_hp"]
+if "mon_hp" not in st.session_state or st.session_state.mon_hp <= 0:
+    st.session_state.mon_hp = curr_mon["max_hp"]
 
 if "num1" not in st.session_state:
     set_new_question()
@@ -265,7 +206,7 @@ if st.session_state.play_sound:
     trigger_sound(st.session_state.play_sound)
     st.session_state.play_sound = None
 
-# Sidebar (Available on all screens)
+# Sidebar Controls
 with st.sidebar:
     st.title("🏆 Leaderboard")
     current_board = load_leaderboard()
@@ -276,22 +217,22 @@ with st.sidebar:
     else:
         st.caption("No records yet. Be the first to claim victory!")
 
-    if st.button("🗑️ Reset Leaderboard", help="Clear all saved high scores"):
+    if st.button("🗑️ Reset Leaderboard"):
         reset_leaderboard()
         st.success("Leaderboard cleared!")
         st.rerun()
 
     st.markdown("---")
-    st.title("🥋 UFC Fighters (P4P Roster)")
-    st.write(f"💰 Available Coins: **{st.session_state.score}**")
+    st.title("🥋 UFC Fighters")
+    st.write(f"💰 Coins: **{st.session_state.score}**")
     for c_name, c_info in CHARACTERS.items():
         c1, c2 = st.columns([2, 1])
         c1.write(f"{c_info['icon']} **{c_name}**")
-        c1.caption(f"{c_info['title']} • {c_info['price']} Coins")
+        c1.caption(f"{c_info['title']} • {c_info['price']} 🪙")
         with c2:
             if c_name in st.session_state.costumes_owned:
                 if st.session_state.equipped_costume == c_name:
-                    st.write("🥊 Selected")
+                    st.write("🥊 Ready")
                 elif st.button("Equip", key=f"w_{c_name}"):
                     st.session_state.equipped_costume = c_name
                     st.rerun()
@@ -304,14 +245,13 @@ with st.sidebar:
                         st.session_state.play_sound = "win"
                         st.rerun()
                     else:
-                        st.error("Insufficient coins!")
+                        st.error("No coins!")
 
     st.markdown("---")
     st.title("🔫 Armory")
     for g_name, g_info in FF_GUNS.items():
         c1, c2 = st.columns([2, 1])
         c1.write(f"{g_info['icon']} **{g_name}** (+{g_info['bonus']} Dmg)")
-        c1.caption(f"_{g_info['desc']}_")
         with c2:
             if g_name in st.session_state.guns_owned:
                 if st.session_state.equipped_gun == g_name:
@@ -329,24 +269,11 @@ with st.sidebar:
                         st.session_state.play_sound = g_info["type"]
                         st.rerun()
                     else:
-                        st.error("Insufficient coins!")
-
-    st.markdown("---")
-    if st.button("🧪 Recovery Shake (+40 HP) - 30 Coins"):
-        if st.session_state.score >= 30:
-            if st.session_state.player_hp >= 100:
-                st.warning("Health points already full!")
-            else:
-                st.session_state.score -= 30
-                st.session_state.player_hp = min(100, st.session_state.player_hp + 40)
-                st.success("Health restored! ❤️")
-                st.rerun()
-        else:
-            st.error("Insufficient coins!")
+                        st.error("No coins!")
 
     st.markdown("---")
     t_choice = st.selectbox(
-        "⏱️ Attack Timer:", 
+        "⏱️ Timer:", 
         list(TIMER_MAP.keys()), 
         index=list(TIMER_MAP.keys()).index(st.session_state.timer_choice)
     )
@@ -356,7 +283,7 @@ with st.sidebar:
         st.rerun()
 
     op_choice = st.selectbox(
-        "Operation Mode:", 
+        "Operation:", 
         ["Multiplication (×)", "Addition (+)", "Subtraction (−)", "Division (÷)"], 
         index=["Multiplication (×)", "Addition (+)", "Subtraction (−)", "Division (÷)"].index(st.session_state.operation)
     )
@@ -365,86 +292,121 @@ with st.sidebar:
         set_new_question()
         st.rerun()
 
-# ==========================================
-# SCREEN 1: WELCOME / START SCREEN
-# ==========================================
+# -----------------
+# SCREEN 1: LOBBY
+# -----------------
 if not st.session_state.game_started:
-    st.markdown("<h1 style='text-align: center; color: #ff3333;'>🥊 QUESTMATCH: UFC ARENA ⚔️</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center; color: #ffffff;'>Solve Fast • Land Strikes • Become World Champion</h3>", unsafe_allow_html=True)
-    st.write("")
-
-    w_col1, w_col2 = st.columns([1, 1])
-    with w_col1:
-        st.info("""
-        ### 📋 Fight Rules & Road to Title:
-        * 🎯 **Round 1:** Grumble Goblin *(100 HP)*
-        * 🐉 **Round 2:** Shadow Dragon *(180 HP)*
-        * 🤖 **Round 3 (Title Fight):** Titan Mecha *(260 HP)*
-        * ⏱️ Answer within the timer to deal weapon damage!
-        * ❌ Wrong or late answers result in opponent counter-attacks.
-        """)
-    with w_col2:
-        st.success(f"""
-        ### 👤 Your Selected Fighter:
-        * **Fighter:** {hero['icon']} {st.session_state.equipped_costume}
-        * **Weapon:** {gun['icon']} {st.session_state.equipped_gun}
-        * **Coins:** {st.session_state.score} 🪙
-        *(Check Sidebar menu to buy/change fighters and weapons)*
-        """)
-
-    st.write("")
+    st.markdown("<h1 style='text-align: center; color: #ff3333;'>🥊 QUESTMATH UFC ARENA ⚔️</h1>", unsafe_allow_html=True)
+    st.info("""
+    ### 🎯 Road To Championship:
+    * **Round 1:** Grumble Goblin *(100 HP)*
+    * **Round 2:** Shadow Dragon *(180 HP)*
+    * **Round 3:** Titan Mecha *(World Championship - 260 HP)*
+    """)
+    st.write(f"🥋 **Selected Fighter:** {hero['icon']} {st.session_state.equipped_costume}")
+    st.write(f"🔫 **Equipped Weapon:** {gun['icon']} {st.session_state.equipped_gun}")
+    
     if st.button("🚀 ENTER THE OCTAGON (START FIGHT)", use_container_width=True):
         st.session_state.game_started = True
+        st.session_state.player_hp = 100
+        st.session_state.level = 0
+        st.session_state.mon_hp = MONSTERS[0]["max_hp"]
         set_new_question()
         st.rerun()
 
-# ==========================================
-# SCREEN 2: ACTIVE OCTAGON FIGHT ARENA
-# ==========================================
+# -----------------
+# SCREEN 2: FIGHT ARENA
+# -----------------
 else:
-    # Top Bar: Round & Levels Indicator
-    st.markdown("<h2 style='text-align: center; color: #ff3333;'>🥊 QuestMath: UFC Octagon Arena ⚔️</h2>", unsafe_allow_html=True)
-    
-    # Visual Level Progress
     current_round_num = st.session_state.level + 1
     total_rounds = len(MONSTERS)
     
-    if st.session_state.level < total_rounds:
-        lvl_col1, lvl_col2 = st.columns([3, 1])
-        lvl_col1.markdown(f"### 🥋 **Level {current_round_num}/{total_rounds}:** {curr_mon['stage']}")
-        lvl_col2.button("🚪 Exit to Lobby", on_click=lambda: st.session_state.update(game_started=False))
-        st.progress(float(current_round_num) / float(total_rounds))
+    st.markdown(f"### 🥊 **Level {current_round_num}/{total_rounds}:** {curr_mon['stage']}")
     
-    col1, col2, col3, col4 = st.columns(4)
-    col1.metric("⭐ Coins", st.session_state.score)
-    col2.metric("🔥 KO Streak", f"{st.session_state.streak}x")
-    col3.metric("🔫 Weapon", f"{gun['icon']} {st.session_state.equipped_gun}")
-    col4.metric("🥋 Fighter", f"{hero['icon']} {st.session_state.equipped_costume}")
-
+    # Status Row
+    c_m1, c_m2, c_m3 = st.columns(3)
+    c_m1.metric("⭐ Coins", st.session_state.score)
+    c_m2.metric("🔥 Streak", f"{st.session_state.streak}x")
+    c_m3.metric("❤️ Your HP", f"{st.session_state.player_hp}/100")
+    
+    # Exit Button
+    st.button("🚪 Exit to Lobby", on_click=lambda: st.session_state.update(game_started=False))
     st.divider()
 
-    # KNOCKED OUT SCREEN
+    # 1. KNOCKED OUT
     if st.session_state.player_hp <= 0:
-        st.error(f"💀 KNOCKED OUT! Final Score: {st.session_state.score} | Round Reached: {current_round_num}")
-        
-        if not st.session_state.saved:
-            with st.form("save_form"):
-                p_name = st.text_input("Enter Fighter Name for Hall of Fame:", max_chars=14, placeholder="Enter your name...")
-                if st.form_submit_button("💾 Save Score"):
-                    if p_name.strip():
-                        save_score(p_name.strip(), st.session_state.score, current_round_num)
-                        st.session_state.saved = True
-                        st.success("Score registered in the Leaderboard! 🏆")
-                        st.rerun()
-                    else:
-                        st.warning("Please type a valid name before saving.")
-        else:
-            st.info("Score has been saved to the Leaderboard!")
-
+        st.error(f"💀 KNOCKED OUT! Round: {current_round_num} | Final Score: {st.session_state.score}")
         if st.button("Rematch 🔄", use_container_width=True):
             st.session_state.player_hp = 100
             st.session_state.score = 0
             st.session_state.level = 0
             st.session_state.mon_hp = MONSTERS[0]["max_hp"]
-            st.session_state.saved = False
             set_new_question()
+            st.rerun()
+
+    # 2. ROUND CLEARED / CHAMPION
+    elif st.session_state.mon_hp <= 0:
+        trigger_sound("win")
+        st.balloons()
+        if st.session_state.level >= total_rounds - 1:
+            st.success("🏆👑 AND NEW! UNDISPUTED UFC WORLD CHAMPION!")
+            if st.button("Play Again from Round 1 🔄", use_container_width=True):
+                st.session_state.level = 0
+                st.session_state.mon_hp = MONSTERS[0]["max_hp"]
+                st.session_state.player_hp = 100
+                st.session_state.game_started = False
+                set_new_question()
+                st.rerun()
+        else:
+            st.success(f"🎉 TKO VICTORY! {curr_mon['name']} defeated!")
+            if st.button(f"Next Fight: Round {current_round_num + 1} ➡️", use_container_width=True):
+                st.session_state.level += 1
+                st.session_state.mon_hp = MONSTERS[st.session_state.level]['max_hp']
+                st.session_state.score += 50
+                set_new_question()
+                st.rerun()
+
+    # 3. FIGHT QUESTION & ATTACK
+    else:
+        # HP Comparison
+        st.write(f"👾 **Opponent:** {curr_mon['name']} (HP: {st.session_state.mon_hp}/{curr_mon['max_hp']})")
+        st.progress(float(max(0, min(100, int(st.session_state.mon_hp * 100 / curr_mon['max_hp'])))) / 100.0)
+
+        # Question Box
+        st.info(f"### 🔥 What is: **{st.session_state.num1} {st.session_state.symbol} {st.session_state.num2}** ?")
+
+        user_input = st.number_input(
+            "Answer:",
+            value=None,
+            step=1,
+            key=f"ans_box_{st.session_state.input_counter}",
+            placeholder="Type answer..."
+        )
+
+        if st.button(f"⚡ STRIKE WITH {st.session_state.equipped_gun.upper()}!", use_container_width=True):
+            taken = time.time() - st.session_state.q_start
+            GRACE = 2.0
+
+            if user_input is None:
+                st.warning("⚠️ Enter answer before striking!")
+            elif taken > (curr_sec + GRACE):
+                st.session_state.player_hp = max(0, st.session_state.player_hp - 20)
+                st.session_state.streak = 0
+                st.session_state.play_sound = "miss"
+                st.error(f"⏰ TIME UP! Opponent countered for -20 HP!")
+                st.session_state.input_counter += 1
+                set_new_question()
+                time.sleep(0.3)
+                st.rerun()
+            else:
+                if user_input == st.session_state.ans:
+                    st.session_state.play_sound = gun["type"]
+                    streak_bonus = st.session_state.streak * 5
+                    dmg = 30 + streak_bonus + gun["bonus"]
+                    st.session_state.mon_hp = max(0, st.session_state.mon_hp - dmg)
+                    st.session_state.score += 20
+                    st.session_state.streak += 1
+                    st.success(f"💥 HIT! Dealt -{dmg} Dmg!")
+                else:
+                    st.session_state.streak = 0
+                    st.session_state.player_hp = max(0, st.session_state.player_hp - 10)
